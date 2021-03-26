@@ -122,7 +122,7 @@ class RSA :
         ciphertext = ''
 
         for i in range(len(plaintext)) :
-            c = pow(ord(plaintext[i]), e, n)
+            c = pow(plaintext[i], e, n)
             ciphertext += r'\{}'.format(hex(c)[1:])
 
         return ciphertext
@@ -136,12 +136,12 @@ class RSA :
 
         d, n = self.get_private_key()
         ciphertext_list = ciphertext.split("\\x")
-        plaintext = ''
+        plaintext = []
 
         for i in range(len(ciphertext_list)) :
             try :
                 p = pow(int(ciphertext_list[i], 16), d, n)
-                plaintext += chr(p)
+                plaintext.append(p)
             except ValueError :
                 continue
 

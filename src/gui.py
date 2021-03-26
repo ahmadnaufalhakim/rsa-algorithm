@@ -141,7 +141,7 @@ class Gui:
 				self.plaintext = []
 				self.label_ciphertext.config(text="Ciphertext")
 				self.textarea.delete("1.0", END)
-				self.textarea.insert("1.0", self.ciphertext)
+				self.textarea.insert("1.0", self.ciphertext[:2000])
 				self.label_ciphertext_path.config(text=filename)
 				self.label_plaintext_path.config(text="")
 				self.btn_encryptdecrypt.config(text="Decrypt")
@@ -164,7 +164,7 @@ class Gui:
 				self.label_time_execution.config(text="time: "+str(end-start)+" second")
 				self.label_ciphertext.config(text="Ciphertext")
 				self.textarea.delete("1.0", END)
-				self.textarea.insert("1.0", self.ciphertext)
+				self.textarea.insert("1.0", self.ciphertext[:2000])
 			except Exception as e:
 				messagebox.showerror("Error", e)
 			
@@ -178,7 +178,7 @@ class Gui:
 				self.label_time_execution.config(text="time: "+str(end-start)+" second")
 				self.label_ciphertext.config(text="Plaintext")
 				self.textarea.delete("1.0", END)
-				self.textarea.insert("1.0", self.plaintext)
+				self.textarea.insert("1.0", bytes(self.plaintext))
 			except Exception as e:
 				messagebox.showerror("Error", e)
 			
@@ -188,7 +188,10 @@ class Gui:
 		filename = filedialog.asksaveasfilename()
 		if filename != '' and type(filename) == str:
 			with open(filename, "wb") as file:
-				file.write(bytes(content.encode()))
+				if type(content) == str:
+					file.write(bytes(content.encode()))
+				else:
+					file.write(bytes(content))
 				file.seek(0,2)
 				self.label_filesize.config(text=str(file.tell())+" B")
 				self.label_filepath.config(text=filename)
